@@ -41,7 +41,6 @@ over time at either range postions.
 
 
 ## plotData
-##############################################################################
 
 ## plot
 
@@ -82,7 +81,6 @@ intensively sampled after 2008, but follow-up surveys were performed in 2017-201
 
 
 ## capData
-##########################################################################################
 
 ### Detections
 
@@ -128,7 +126,6 @@ band. This column is not used for analysis.
 
 
 ## countData
-#######################################################################################
 
 The number of unbanded female BTBW breeding on each study plot in each
 year. Calculated from PDF maps of spot-mapping territory data. 
@@ -140,7 +137,6 @@ other data sets.
 
 
 ## precipData
-############################################################################################
 
 Used to determine total annual precipitation. Note that for the CWT measurements many days
 do not have readings. These indicate days where precipitation was too low to detect (assumed 0).
@@ -175,7 +171,6 @@ Variable matches other datasets
 
 
 ## thermalsumsData
-#####################################################################################
 
 Daily degree days calculated based on daily minimum and maximum values from temperature data,
 as well as site-specific hours of sunrise and sunset (rounded down) as in Cesaraccio 
