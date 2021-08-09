@@ -9,10 +9,16 @@ Data for publication: Demographic drivers of trailing edge range contractions in
 
 # Metadata for btbw-mcmc and climate data
 
-This document describes all of the data for the btbw-mcmc project. Climate and black-throated blue warbler
+The data for the btbw-mcmc project are stored in the 'BTBW_markre_clim_data' gzip file. Climate and black-throated blue warbler
 (Setophaga caerulescens, BTBW) mark-recapture data were collected from the trailing edge of the range near
 the Coweeta LTER in North Carolina (CWT) and at the range core at the Hubbard Brook Experimental Forest 
 in New Hampshire (HB).
+
+Sample JAGS code for running the Bayesian hierarchical population models is contained in the 'BTBW_JAGS_code' text file. The
+file contains code for temporal trends on per-capita and recruitment; for climate models (t-7)/4 would be substituted with
+climate variable. All climate variables were standardized prior to running models. The model for the trailing-low study plot
+was modified slightly so that η in 2017 and 2018 was multiplied by a measure of detection probability with an informative prior
+to account for imperfect detection during surveys in those years. 
 
 There are five data sources to describe, all contained within the gzip file:
 
