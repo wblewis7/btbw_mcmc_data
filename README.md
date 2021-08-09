@@ -1,5 +1,5 @@
 # btbw_mcmc_data
-Data for running mcmc analyses for Lewis et al. Demographic drivers of trailing edge range contractions in a migratory songbird
+Data and JAGS code for running mcmc analyses for Lewis et al. Demographic drivers of trailing edge range contractions in a migratory songbird
 
 ---
 authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, T. Scott Sillett, Ryan W. Chitwood, Kirk W. Stodola, Mason H. Cline, Joanna L. Hatt, Michael T. Hallworth, Sara A. Kaiser, and Nicholas L. Rodenhouse.
