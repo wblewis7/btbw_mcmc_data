@@ -1,12 +1,12 @@
 # btbw_mcmc_data
-Data and JAGS code for running mcmc analyses for Lewis et al. Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
+Data and JAGS code for running population modelling for Lewis et al. Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
 ---
 authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwood, Mason H. Cline, Michael T. Hallworth, Joanna L. Hatt, Jeff Hepinstall_Cymerman, Sara A. Kaiser, Nicholas L. Rodenhouse, T. Scott Scillett, Kirk W. Stodola, Michael S. Webster, and Richard T. Holmes
 
 Data for publication: Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
 ---
 
-# Metadata for btbw-mcmc and climate data
+# Metadata
 
 The data for the BTBW project are stored in the 'BTBW_rawdata' gzip file. Climate and black-throated blue warbler
 (Setophaga caerulescens, BTBW) mark-recapture data were collected from study sites two range positions: at the trailing edge of the range near
