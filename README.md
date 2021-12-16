@@ -1,16 +1,15 @@
 # btbw_mcmc_data
-Data and JAGS code for running mcmc analyses for Lewis et al. Demographic drivers of trailing edge range contractions in a migratory songbird
-
+Data and JAGS code for running mcmc analyses for Lewis et al. Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
 ---
-authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, T. Scott Sillett, Ryan W. Chitwood, Kirk W. Stodola, Mason H. Cline, Joanna L. Hatt, Michael T. Hallworth, Sara A. Kaiser, and Nicholas L. Rodenhouse.
+authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwood, Mason H. Cline, Michael T. Hallworth, Joanna L. Hatt, Jeff Hepinstall_Cymerman, Sara A. Kaiser, Nicholas L. Rodenhouse, T. Scott Scillett, Kirk W. Stodola, Michael S. Webster, and Richard T. Holmes
 
-Data for publication: Demographic drivers of trailing edge range contractions in a migratory songbird. Submitted to Global Change Biology
+Data for publication: Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
 ---
 
 # Metadata for btbw-mcmc and climate data
 
-The data for the btbw-mcmc project are stored in the 'BTBW_markre_clim_data' gzip file. Climate and black-throated blue warbler
-(Setophaga caerulescens, BTBW) mark-recapture data were collected from the trailing edge of the range near
+The data for the BTBW project are stored in the 'BTBW_rawdata' gzip file. Climate and black-throated blue warbler
+(Setophaga caerulescens, BTBW) mark-recapture data were collected from study sites two range positions: at the trailing edge of the range near
 the Coweeta LTER in North Carolina (CWT) and at the range core at the Hubbard Brook Experimental Forest 
 in New Hampshire (HB).
 
@@ -23,25 +22,25 @@ to account for imperfect detection during surveys in those years.
 There are five data sources to describe, all contained within the gzip file:
 
 - capData contains capture histories and individual data.
-- countData contains counts of unmarked individuals on each plot in each year.
+- countData contains counts of unmarked individuals on each study plot in each year.
 - plotData contains plot-level data.
-- precipData contains daily precipitation (mm) data from weather stations at both sites.
-- thermalsumsData contains daily degree days over 4C for calculating thermal sums at both sites.
+- tempData contains daily minimum, maximum, and average temperature (C) data from climate stations at both range positions.
+- precipData contains daily precipitation (mm) data from weather stations at both range positions.
 
 These first 3 data files only contain information on birds that were within
 the plot boundaries. Some birds were captured or first-detected off
 the plots. This is indicated by discrepancies between
 "cap_data > cap_year" and encounter histories.
 
-The last 2 data files contain climate data from 2001-2018 for weather
-stations operated by the USDA forest service. Stations are not located on the actual BTBW study plots,
-but are in the nearby area. Temperature data can be found at https://www.fs.usda.gov/rds/archive/catalog/RDS-2015-0042
+The last 2 data files contain climate data from 2002-2018 for weather
+stations operated by the USDA forest service. Stations were not generally located on the actual BTBW study plots,
+but were located adjacent to plots of in the nearby area. Temperature data can be found at https://www.fs.usda.gov/rds/archive/catalog/RDS-2015-0042
 and https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hbr.59.9 while precipitation data can
 be found at https://www.fs.usda.gov/rds/archive/catalog/RDS-2017-0031 and 
 https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hbr.13.13.
-Only stations which were located within 175m in elevation of the study plots were included.
-Both temperature and precipitation are correlated with elevation, but this relationship does not differ
-over time at either range postions. 
+Only stations at elevations which were within 175m of the elevation range of the study plots at each range position were included.
+Both temperature and precipitation are correlated with elevation at both range positions, but this relationship does not differ
+over time at either site. 
 
 
 
@@ -143,6 +142,52 @@ other data sets.
 
 
 
+## tempData
+
+Used to determine average daily temperatures during the early-breeding period. This is the
+period of maximal breeding activity, and is calculated as the mean of average daily temperatures
+between the average first laying date (day of year 127 (trailing edge) and 143 (range core)) and
+the average fledge date of first nesting attempts (day of year 159 (trailing edge) and 175 (range
+core)).
+
+### Station
+
+Name of climate station
+
+### YEAR/MONTH/DAY
+
+Date of the temperature readings
+
+### TMIN
+
+Daily minimum temperature in degrees C recorded from the climate station. This column is not used
+in analysis.
+
+### TMAX
+
+Daily maximum temperature in degrees C recorded from the climate station. This column is not used
+in analysis.
+
+### TAVG
+
+Daily average temperature in degrees C recorded from the climate station.
+
+### Lat/Long/Elevation
+
+The latitude, longitude, and elevation (m ASL) of the rain gaige
+
+### DOY
+
+Calendar day of the year of the reading
+
+### Site
+
+Variable matches other datasets
+
+
+
+
+
 ## precipData
 
 Used to determine total annual precipitation. Note that for the CWT measurements many days
@@ -172,40 +217,3 @@ Calendar day of the year of the reading
 ### Site
 
 Variable matches other datasets
-
-
-
-
-
-## thermalsumsData
-
-Daily degree days calculated based on daily minimum and maximum values from temperature data,
-as well as site-specific hours of sunrise and sunset (rounded down) as in Cesaraccio 
-et al. 2001,Lany et al. 2016. Method provides measure of heat accumulation (and hence plant growth
-and phenology) by estimating hourly temps and then calulating growing degree days based on
-daytime temps greater than 4C. Degree days summed together over specific time periods to 
-calculate thermal sum. Important determinant of seasonal progression and caterpillars 
-(Lany et al. 2016, Reynolds et al. 2007). 
-Used to determine total thermal sums during first broods at both sites, as
-temperature could cause thermal stress to eggs or nestlings. Using DOY 127-
-159 at CWT (average day of first egg and fledge date of first broods, 
-respectively) and DOY 143-175 at HB. Roughly corresponds to May temps,
-which have been increasing at both sites.
-
-### Site
-
-Variable matches other datasets
-
-### Year
-
-Year of measurement
-
-### DOY
-
-Calendar day of the year of the measurement
-
-### DegreeDays
-Daily values of growing degree days over 4C calculated via Cesaraccio et al. 2001
-
-### Elevation
-Elevation (m ASL) of the weather station
