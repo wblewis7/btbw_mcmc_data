@@ -1,4 +1,4 @@
-# btbw_mcmc_data
+# BTBW_metadata
 Data and JAGS code for running population modelling for Lewis et al. Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
 ---
 authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwood, Mason H. Cline, Michael T. Hallworth, Joanna L. Hatt, Jeff Hepinstall_Cymerman, Sara A. Kaiser, Nicholas L. Rodenhouse, T. Scott Scillett, Kirk W. Stodola, Michael S. Webster, and Richard T. Holmes
