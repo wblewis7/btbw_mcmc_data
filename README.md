@@ -11,7 +11,7 @@ authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwo
 # BTBW_rawdata_Lewis_etal.gzip
 
 
-The data for the black-throated blue warbler (Setophaga caerulescens, BTBW) project are stored in the 'BTBW_rawdata' gzip file. Climate and BTBW
+The data for the black-throated blue warbler (Setophaga caerulescens, BTBW) project are stored in the 'BTBW_rawdata_Lewis_etal' gzip file. Climate and BTBW
 mark-recapture data were collected from study sites two range positions: at the trailing edge of the range near
 the Coweeta LTER in North Carolina (CWT) and at the range core at the Hubbard Brook Experimental Forest 
 in New Hampshire (HB).
