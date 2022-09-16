@@ -1,23 +1,21 @@
 # BTBW_metadata
-Data and JAGS code for running population modelling for Lewis et al. Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
+Data, JAGS code, R code, and tables of parameter and realized estimates for Bayesian hierarchical models estimating population dynamics and demographic rates of black-throated blue warblers (Setophaga caerulescens) breeding across a range of elevations at the trailing edge of the range in North Carolina and the core of the range in New Hampshire.
 ---
 authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwood, Mason H. Cline, Michael T. Hallworth, Joanna L. Hatt, Jeff Hepinstall-Cymerman, Sara A. Kaiser, Nicholas L. Rodenhouse, T. Scott Scillett, Kirk W. Stodola, Michael S. Webster, and Richard T. Holmes
 
-Data for publication: Declining apparent survival and recruitment drive trailing edge range contractions in a migratory songbird
+
 ---
 
 # Metadata
 
-The data for the BTBW project are stored in the 'BTBW_rawdata' gzip file. Climate and black-throated blue warbler
-(Setophaga caerulescens, BTBW) mark-recapture data were collected from study sites two range positions: at the trailing edge of the range near
+# BTBW_rawdata_Lewis_etal.gzip
+#########################################################################################################################################
+
+The data for the black-throated blue warbler (Setophaga caerulescens, BTBW) project are stored in the 'BTBW_rawdata' gzip file. Climate and BTBW
+mark-recapture data were collected from study sites two range positions: at the trailing edge of the range near
 the Coweeta LTER in North Carolina (CWT) and at the range core at the Hubbard Brook Experimental Forest 
 in New Hampshire (HB).
 
-Sample JAGS code for running the Bayesian hierarchical population models is contained in the 'BTBW_JAGS_code' text file. The
-file contains code for temporal trends on per-capita and recruitment; for climate models (t-7)/4 would be substituted with
-climate variable. All climate variables were standardized prior to running models. The model for the trailing-low study plot
-was modified slightly so that η in 2017 and 2018 was multiplied by a measure of detection probability with an informative prior
-to account for imperfect detection during surveys in those years. 
 
 There are five data sources to describe, all contained within the gzip file:
 
@@ -32,9 +30,9 @@ the plot boundaries. Some birds were captured or first-detected off
 the plots. This is indicated by discrepancies between
 "cap_data > cap_year" and encounter histories.
 
-The last 2 data files contain climate data from 2002-2018 for weather
+The last 2 data files contain climate data from 2002-2019 for weather
 stations operated by the USDA forest service. Stations were not generally located on the actual BTBW study plots,
-but were located adjacent to plots of in the nearby area. Temperature data can be found at https://www.fs.usda.gov/rds/archive/catalog/RDS-2015-0042
+but were located adjacent to plots in the nearby area. Temperature data can be found at https://www.fs.usda.gov/rds/archive/catalog/RDS-2015-0042
 and https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hbr.59.9 while precipitation data can
 be found at https://www.fs.usda.gov/rds/archive/catalog/RDS-2017-0031 and 
 https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hbr.13.13.
@@ -71,7 +69,7 @@ A three-level factor describing each plot's relative elevation within each range
 
 ### elev_val
 
-The mid elevation at each plot (m ASL).
+The middle elevation of each study plot (m ASL).
 
 ### first_year
 
@@ -91,10 +89,12 @@ intensively sampled after 2008, but follow-up surveys were performed in 2017-201
 ### Detections
 
 The first 18 columns are detections named yYEAR. A value of `1` indicates that
-that individuals was detected in that year. A value of `0` indicates the
-opposite. A value of `NA` indicates that the study plot was not sampled in that
-year. The low-elevation plot at CWT ('rk') was not intensively sampled after 
-2008, but follow-up surveys were performed in 2017-2018.
+that individuals was not detected in that year. A value of `2` indicates that
+bird was detected as an SY. A value of '3' indicates that the bird was detected
+as an ASY. See "age_cap" below for appreviations. A value of `NA` indicates that
+the study plot was not sampled in that year. The low-elevation plot at CWT ('rk') 
+was not intensively sampled after 2008, but follow-up surveys were performed in 
+2017-2018.
 
 ### plot
 
@@ -119,13 +119,6 @@ not included in the detection history.
 
 Using age_cap and cap_year it is possible to construct a matrix of individual
 age over time.
-
-### alum_band
-
-This is the unique Federal USGS aluminum band number for each
-individual. Some values are left blank, indicating that the bird
-was banded with plastic colored leg bands but not an aluminum
-band. This column is not used for analysis.
 
 
 
@@ -217,3 +210,86 @@ Calendar day of the year of the reading
 ### Site
 
 Variable matches other datasets
+##################################################################################################################################
+
+
+
+
+
+# BTBW_JAGS_sample_script.jag
+##################################################################################################################################
+
+Sample JAGS code for running the Bayesian hierarchical population models is contained in the 'BTBW_JAGS_sample_script.jag' file, which
+can be opened in a text editor. This script is called in the file 'SampleCode_BayesianModels_BTBW.R'. The file contains sample code for
+modeling trend effects of average daily early-breeding temperatures on per-capitura recruitment and apparent survival. For temporal models,
+clim.act.stand[t-1] would be replaced with (t-7)/4 and the for loop under 'Incorporating uncertainty in climate measures' would be ommitted.
+For annual precipitation models, the prior distribution for clim.act would be changed to clim.act[n] ~ dunif(1000,3500). The model for the 
+trailing-low study plot was modified slightly so that η in 2017 and 2018 was multiplied by a measure of detection probability with an 
+informative prior to account for imperfect detection during surveys in those years. This informative prior was based on the mean (0.61) 
+and sd (0.27) of daily detection probabilities of females at the higher-elevation study plots at the trailing edge from 2011 - 2019. 
+In the model, 'ebtemp', 'ebtempse', 'ebtemp.mean', 'ebtemp.sd', 'u', 'ycap', and 'ydet' are supplied as data.
+#####################################################################################################################################
+
+
+
+
+
+# SampleCode_BayesianModels_BTBW.R
+###################################################################################################################################
+
+Sample R code for running the Bayesian hierarchical population models is contained in the 'SampleCode_BayesianModels_BTBW' R file. This
+code calls 'BTBW_rawdata_Lewis_etal.gzip' and 'BTBW_JAGS_sample_script.jag'. Sample code is provided for running the JAGS model, which
+estimates trend effects of average daily early-breeding temperature on per-capita recruitment and apparent survival. The R code is the 
+same when calling models with effects of time or annual precipitation. Code is shown for running population models at the mid-elevation
+plot at the trailing edge of the range in North Carolina, though code is similar for most other study plots. The exception was the 
+low-elevation plot at the trailing edge, where the plot was sampled from 2002 - 2008 and then was revisited once each year in 2017 and 2018.
+The capture data from line 59 at this plot was reformatted with NAs from 2009 - 2016 and with 1s from 2017 - 2018. Similarly, the count 
+data from line 98 was reformatted with NAs from 2009 - 2016 and 0s from 2017 - 2018. MCMC chains are saved in the file 'mcmc_out_BTBW_ebtemp_bs.gzip',
+which is called by the file 'SampleCode_forecast_BTBW.R'.
+#####################################################################################################################################
+
+
+
+
+
+# SampleCode_forecast_BTBW.R
+######################################################################################################################################
+
+Sample R code for performing statistical forecasting to assess population viability through 2040, contained in the 'SampleCode_forecast_BTBW'
+R file. This code calls 'BTBW_rawdata_Lewis_etal.gzip' the mcmc output from 'SampleCode_forecast_BTBW.R', saved in the 'mcmc_out_BTBW_ebtemp_bs.gzip'
+file. The file shows sample code for forecasting dynamics in response to projected trends in average daily early-breeding temperature at 
+the mid-elevation plot at the trailing edge of the range in North Carolina, but code is similar at other study plots or when forecasting
+dynamics in response to temporal or precipitation trends. For climate models, we projected climate at the study plots in future years 
+(last year of study at the study plot - 2040) based on the observed 2002 - 2019 trend in climate variables at each range position (trailing
+edge or range core). We assumed that future changes in climate would be similar across elevations within each range position.
+########################################################################################################################################
+
+
+
+
+
+# ParameterEstimatesfromBayesianHierarchicalModel.pdf
+#########################################################################################################################################
+
+Parameter estimates of population dynamics of black-throated blue warblers breeding at the trailing edge of the range in North Carolina and
+core of the range in New Hampshire. Mean, SD, median, lower, and upper 95% credible intervals are provided for estimates of the bounding
+parameter on recruitment, per-capita recrutiment intercept, temporal/climate trend effect on per-capita recruitment, density-dependent effect
+on recruitment, first-time breeder (SY) apparent survival intercept, after-first-time breeder (ASY) apparent survival intercept, temporal/climate
+trend effect on apparent survival, age ratio of ASYs to SYs, probability of classifying birds into a specific age class upon capture, capture 
+probability intercept, temporal trend in capture probability, and probability of being detected while breeding on the study plot. Models were
+run separatley at each study plot, allowing for trend effects of year, average daily early-breeding temperatures, or annual precipitation on
+per-capita recruitment and apparent survival.
+###########################################################################################################################################
+
+
+
+
+
+# RealizedEstimatesfromBayesianHierachicalModel.pdf
+###########################################################################################################################################
+
+Yearly estimates of abundance and realized demographic rates of black-throated blue warblers breeding at the trailing edge of the range in
+North Carolina and core of the range in New Hamphire. Median and 95% credible intervals are provided for yearly estimates of abundance,
+population growth rate, per-capita recruitment, and apparent survival. Estimates at each plot incorporated temporal trends on per-capita
+recruitment and apparent survival.
+############################################################################################################################################
