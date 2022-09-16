@@ -1,0 +1,131 @@
+model {
+
+  ## Lewis, W. B., R. J. Cooper, R. B. Chandler, R. W. Chitwood, 
+  ##   M. H. Cline, M. T. Hallworth, J. L. Hatt, J. Hepinstall-Cymerman,
+  ##   S. A. Kaiser, N. L. Rodenhouse, T. S. Sillett, K. W. Stodola, 
+  ##   M. S. Webster, and R. T. Holmes. Climate-mediated population 
+  ##   dynamics of a migratory songbird differ between the trailing 
+  ##   edge and range core. Submitted to Ecological Monographs.
+
+  ## Priors
+  psi ~ dunif(0, 1)				# Pr(being in population at start of study)
+  gamma00 ~ dexp(2)				# Upper limit of recruitment
+  gamma0 ~ dnorm(0, 1)				# Intercept for recruitment
+  gamma1 ~ dnorm(0, 0.1)			# Temporal/climate trend for recruitment 
+  gamma2 ~ dnorm(0, 0.1)T(0,)			# Only positive values of gamma2, which provides negative density dependence below
+  phi0sy ~ dnorm(0, 0.4)			# Intercept for apparent survival term (SY)
+  phi0asy ~ dnorm(0, 0.4)			# Intercept for apparent survival term (ASY)
+  phi1 ~ dnorm(0, 0.1)				# Temporal/climate trend for apparent survival
+  tau ~ dunif(0, 1)				# Age ratio in year 1
+  pcap0  ~ dnorm(0, 0.4)			# Intercept for capture probability
+  pcap1  ~ dnorm(0, 0.1)			# Temporal trend for capture probability
+  eta0  ~ dnorm(0, 0.4)				# Pr(detecting a banded bird breeding on the study plot)
+  kappa ~ dunif(0, 1)				# Pr(determining age on capture)
+
+
+
+
+  # Incorporating uncertainy in climate measures
+  for(n in 1:(lastYear-1)){
+   clim.act[n] ~ dunif(10,20) 			# Prior between 10-20 C, for annual precipitation this would be set from 1000-3500 mm
+   ebtemp[n] ~ dnorm(clim.act[n],1/pow(ebtempse[n],2))
+   clim.act.stand[n] <- (clim.act[n] - ebtemp.mean)/ebtemp.sd
+  }
+
+
+  ## Derived parameters
+  for(t in firstYear:lastYear) {
+    N[t] <- sum(z[,t]) 				# Annual abundance
+    NSY[t] <- sum(state[,t]==1)
+    D[t] <- N[t]/Area				# Density 
+    ED[t] <- sum(EN[,t])/Area
+    Q[t] <- NSY[t]/max(N[t],1)			# Age ratio (proportion SY)
+    markedAlive[t] <- marked[1:M,t] %*% z[1:M,t]
+    U[t] <- N[t]-markedAlive[t]			# Alive, unmarked,
+    u[t] ~ dbin(eta[t], U[t])
+    logit(pcap[t]) <- pcap0 + pcap1*(t-7)/4
+    logit(eta[t]) <- eta0
+    ## Observation states:
+    ## 1: Not detected
+    ## 2: Detected as SY
+    ## 3: Detected as ASY
+    ## 4: Detected as AHY
+    pi.y[1,1,t] <- 1-pcap[t]
+    pi.y[1,2,t] <- pcap[t]*kappa
+    pi.y[1,3,t] <- 0
+    pi.y[1,4,t] <- pcap[t]*(1-kappa)
+    pi.y[2,1,t] <- 1-pcap[t]
+    pi.y[2,2,t] <- 0
+    pi.y[2,3,t] <- pcap[t]*kappa
+    pi.y[2,4,t] <- pcap[t]*(1-kappa)
+    pi.y[3,1,t] <- 1
+    pi.y[3,2,t] <- 0
+    pi.y[3,3,t] <- 0
+    pi.y[3,4,t] <- 0
+  }
+
+  EN[1,firstYear] <- M*psi*(1-tau) 		# Expected number of SYs
+  EN[2,firstYear] <- M*psi*tau			# Expected number of ASYs
+  for(t in 1:(firstYear-1)) {
+    pi.b[t] <- 0 					# Must do this for any year before firstYear
+  }
+  pi.b[firstYear] <- sum(EN[,firstYear])/M		
+  for(t in (firstYear+1):lastYear) {
+    ## Projection matrix
+    # For temporal trend model, clim.act.stand[t-1] is replaced by (t-7)/4
+    gamma[t-1] <- gamma00/(1 + exp(-(gamma0 + gamma1*clim.act.stand[t-1] - gamma2*(ED[t-1]^2-0.3)/0.2)))
+    logit(phiSY[t-1]) <- phi0sy + phi1*clim.act.stand[t-1]
+    logit(phiASY[t-1]) <- phi0asy + phi1*clim.act.stand[t-1]
+    phi[t-1] <- phiSY[t-1]*Q[t-1] + phiASY[t-1]*(1-Q[t-1]) 
+    W[1,1:2,t-1] <- c(gamma[t-1], gamma[t-1])
+    W[2,1:2,t-1] <- c(phiSY[t-1], phiASY[t-1])
+    ## Compute dominant eigenvalue (Elam, the asymtotic growth rate)
+    part1[t-1] <- W[1,1,t-1]+W[2,2,t-1]
+    part2[t-1] <- W[1,1,t-1]*W[2,2,t-1]-W[1,2,t-1]*W[2,1,t-1]
+    Elam[t-1] <- part1[t-1]/2 + sqrt(part1[t-1]*part1[t-1]/4 - part2[t-1])
+    EN[1:2,t] <- W[,,t-1] %*% EN[,t-1] 		# Expected number of SYs and ASYs
+    ER[t] <- EN[1,t]
+    pi.b[t] <- ER[t]/M
+    R[t] <- sum(recruited[1:M,t])			# nRecruits each year
+    S[t] <- sum(survived[1:M,t])			# nSurvivors
+    lambda[t] <- N[t]/N[t-1]
+  }
+  ENsuper <- sum(EN[,firstYear])+sum(ER[(firstYear+1):lastYear])
+  omega <- ENsuper/M
+  pi.b[lastYear+1] <- 1-omega
+
+  ## Ecological states:
+  ## 1: Alive SY
+  ## 2: Alive ASY
+  ## 3: Dead (Unborn and dead)
+  for (i in 1:M) {
+    b[i] ~ dcat(pi.b[])
+    z[i,firstYear] <- ifelse(equals(b[i],firstYear), 1, 0)
+    age[i,firstYear] ~ dcat(c(1-tau, tau))
+    state[i,firstYear] <- z[i,firstYear]*age[i,firstYear] +
+                          (1-z[i,firstYear])*3
+    for (t in (firstYear+1):lastYear) {
+      z0[i,t] ~ dbern(z[i,t-1]*W[2,age[i,t-1],t-1])
+      z[i,t] <- ifelse(b[i]==t, 1, z0[i,t])
+      age[i,t] <- ifelse(b[i]==t, 1, 2)
+      state[i,t] <- z[i,t]*age[i,t] + (1-z[i,t])*3
+      recruited[i, t] <- equals(state[i,t], 1)
+      survived[i, t] <- equals(state[i,t], 2)
+      alive[i,t] <- (state[i,t]==1) || (state[i,t]==2)
+    }
+    ## Capture data.
+    ## Birds are never recaptured, only resighted after first capture
+    for(t in firstYear:firstcap[i]) {
+      ycap[i,t] ~ dcat(pi.y[state[i,t],1:4,t])
+    }
+    ## Resight data
+    ## Birds can be individually identified by sight if 
+    ##   they are marked in the year they are captured and afterward.
+    ##   Can only be resighted if breeding on study plots.
+    for(t in firstcap[i]:lastYear) {
+      ydet[i,t] ~ dbern(z[i,t]*eta[t])
+    }
+    everAlive[i] <- max(z[i,firstYear:lastYear])
+  }
+  Nsuper <- sum(everAlive[1:M])
+}
