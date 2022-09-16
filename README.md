@@ -9,7 +9,7 @@ authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwo
 # Metadata
 
 # BTBW_rawdata_Lewis_etal.gzip
-#########################################################################################################################################
+
 
 The data for the black-throated blue warbler (Setophaga caerulescens, BTBW) project are stored in the 'BTBW_rawdata' gzip file. Climate and BTBW
 mark-recapture data were collected from study sites two range positions: at the trailing edge of the range near
@@ -210,14 +210,14 @@ Calendar day of the year of the reading
 ### Site
 
 Variable matches other datasets
-##################################################################################################################################
+
 
 
 
 
 
 # BTBW_JAGS_sample_script.jag
-##################################################################################################################################
+
 
 Sample JAGS code for running the Bayesian hierarchical population models is contained in the 'BTBW_JAGS_sample_script.jag' file, which
 can be opened in a text editor. This script is called in the file 'SampleCode_BayesianModels_BTBW.R'. The file contains sample code for
@@ -228,14 +228,14 @@ trailing-low study plot was modified slightly so that η in 2017 and 2018 was mu
 informative prior to account for imperfect detection during surveys in those years. This informative prior was based on the mean (0.61) 
 and sd (0.27) of daily detection probabilities of females at the higher-elevation study plots at the trailing edge from 2011 - 2019. 
 In the model, 'ebtemp', 'ebtempse', 'ebtemp.mean', 'ebtemp.sd', 'u', 'ycap', and 'ydet' are supplied as data.
-#####################################################################################################################################
+
 
 
 
 
 
 # SampleCode_BayesianModels_BTBW.R
-###################################################################################################################################
+
 
 Sample R code for running the Bayesian hierarchical population models is contained in the 'SampleCode_BayesianModels_BTBW' R file. This
 code calls 'BTBW_rawdata_Lewis_etal.gzip' and 'BTBW_JAGS_sample_script.jag'. Sample code is provided for running the JAGS model, which
@@ -246,14 +246,14 @@ low-elevation plot at the trailing edge, where the plot was sampled from 2002 - 
 The capture data from line 59 at this plot was reformatted with NAs from 2009 - 2016 and with 1s from 2017 - 2018. Similarly, the count 
 data from line 98 was reformatted with NAs from 2009 - 2016 and 0s from 2017 - 2018. MCMC chains are saved in the file 'mcmc_out_BTBW_ebtemp_bs.gzip',
 which is called by the file 'SampleCode_forecast_BTBW.R'.
-#####################################################################################################################################
+
 
 
 
 
 
 # SampleCode_forecast_BTBW.R
-######################################################################################################################################
+
 
 Sample R code for performing statistical forecasting to assess population viability through 2040, contained in the 'SampleCode_forecast_BTBW'
 R file. This code calls 'BTBW_rawdata_Lewis_etal.gzip' the mcmc output from 'SampleCode_forecast_BTBW.R', saved in the 'mcmc_out_BTBW_ebtemp_bs.gzip'
@@ -262,14 +262,14 @@ the mid-elevation plot at the trailing edge of the range in North Carolina, but 
 dynamics in response to temporal or precipitation trends. For climate models, we projected climate at the study plots in future years 
 (last year of study at the study plot - 2040) based on the observed 2002 - 2019 trend in climate variables at each range position (trailing
 edge or range core). We assumed that future changes in climate would be similar across elevations within each range position.
-########################################################################################################################################
+
 
 
 
 
 
 # ParameterEstimatesfromBayesianHierarchicalModel.pdf
-#########################################################################################################################################
+
 
 Parameter estimates of population dynamics of black-throated blue warblers breeding at the trailing edge of the range in North Carolina and
 core of the range in New Hampshire. Mean, SD, median, lower, and upper 95% credible intervals are provided for estimates of the bounding
@@ -279,17 +279,15 @@ trend effect on apparent survival, age ratio of ASYs to SYs, probability of clas
 probability intercept, temporal trend in capture probability, and probability of being detected while breeding on the study plot. Models were
 run separatley at each study plot, allowing for trend effects of year, average daily early-breeding temperatures, or annual precipitation on
 per-capita recruitment and apparent survival.
-###########################################################################################################################################
 
 
 
 
 
 # RealizedEstimatesfromBayesianHierachicalModel.pdf
-###########################################################################################################################################
+
 
 Yearly estimates of abundance and realized demographic rates of black-throated blue warblers breeding at the trailing edge of the range in
 North Carolina and core of the range in New Hamphire. Median and 95% credible intervals are provided for yearly estimates of abundance,
 population growth rate, per-capita recruitment, and apparent survival. Estimates at each plot incorporated temporal trends on per-capita
 recruitment and apparent survival.
-############################################################################################################################################
