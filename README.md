@@ -1,7 +1,7 @@
 # BTBW_metadata
 Data, JAGS code, R code, and tables of parameter and realized estimates for Bayesian hierarchical models estimating population dynamics and demographic rates of black-throated blue warblers (Setophaga caerulescens) breeding across a range of elevations at the trailing edge of the range in North Carolina and the core of the range in New Hampshire.
 ---
-authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwood, Mason H. Cline, Michael T. Hallworth, Joanna L. Hatt, Jeff Hepinstall-Cymerman, Sara A. Kaiser, Nicholas L. Rodenhouse, T. Scott Scillett, Kirk W. Stodola, Michael S. Webster, and Richard T. Holmes
+authors: William B. Lewis, Robert J. Cooper, Richard B. Chandler, Ryan W. Chitwood, Mason H. Cline, Michael T. Hallworth, Joanna L. Hatt, Jeff Hepinstall-Cymerman, Sara A. Kaiser, Nicholas L. Rodenhouse, T. Scott Sillett, Kirk W. Stodola, Michael S. Webster, and Richard T. Holmes
 
 
 ---
